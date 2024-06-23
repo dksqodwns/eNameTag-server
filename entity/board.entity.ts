@@ -13,7 +13,7 @@ export class Board extends BaseTime {
   @Column({ type: 'longtext' })
   text: string;
 
-  @Column({ name: 'thumbs_up' })
+  @Column({ name: 'thumbs_up', default: 0 })
   thumbsUp: number;
 
   @ManyToOne(() => Category, (category) => category.board)

@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Board, Category } from 'entity';
 
 export const localOrmConfig = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
@@ -11,8 +12,8 @@ export const localOrmConfig = TypeOrmModule.forRootAsync({
     username: configService.get('LOCAL_USERNAME'),
     password: configService.get('LOCAL_PASSWORD'),
     database: configService.get('LOCAL_DATABASE'),
-    entities: [],
-    synchronize: true,
+    entities: [Board, Category],
+    synchronize: false,
   }),
   inject: [ConfigService],
 });
