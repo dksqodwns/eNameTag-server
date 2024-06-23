@@ -8,7 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/api/bjahn');
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(3000);
+  await app.listen(4000);
 }
 
 bootstrap();
