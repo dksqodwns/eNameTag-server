@@ -1,15 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from '../dto/request/create.board.dto';
-import { BoardMetadataDto } from '../dto/request/board.metadata.dto';
 
 @Controller()
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Get('board')
-  async findAll(@Query() metadata: BoardMetadataDto) {
-    return this.boardService.findAllBoard(metadata);
+  async findAll() {
+    return this.boardService.findAllBoard();
   }
 
   @Post('board')
@@ -18,10 +17,9 @@ export class BoardController {
     return await this.boardService.createBoard(dto);
   }
 
-  // TODO: 여러 사람이 눌렀을때 구분을 어떻게 할 수 있을까?
-  @Post('board/:id/up')
+  @Patch('board/:id/thumbs-up')
   async thumbsUp(@Param('id') id: number) {
-    return this.boardService.thumbsUpBoardById(id);
+    return this.boardService.incrementThumbsUp(id);
   }
 
   @Get('category')

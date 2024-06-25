@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Board, Category } from '../../entity';
 import { CreateBoardDto } from '../dto/request/create.board.dto';
 import { isNil, pipe, throwIf } from '@fxts/core';
-import { BoardMetadataDto } from '../dto/request/board.metadata.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -12,9 +11,13 @@ export class BoardService {
   @InjectRepository(Category)
   private readonly categoryRepository: Repository<Category>;
 
-  async findAllBoard(metadata: BoardMetadataDto) {
-    // TODO: 쿼리 옵션 넣어줘서 최신순 정렬 및 카테고리, 시간, 추천 별 정렬
-    return await this.boardRepository.find({ relations: ['category'] });
+  async findAllBoard(): Promise<Board[]> {
+    return await this.boardRepository.find({
+      relations: ['category'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async findAllCategory(): Promise<Category[]> {
@@ -49,11 +52,9 @@ export class BoardService {
     });
   }
 
-  async thumbsUpBoardById(id: number): Promise<Board> {
-    return pipe(
-      await this.findBoardById(id),
-      (board) => (board.thumbsUp += 1),
-      async () => await this.findBoardById(id),
-    );
+  async incrementThumbsUp(id: number): Promise<Board> {
+    const board = await this.findBoardById(id);
+    board.thumbsUp += 1;
+    return this.boardRepository.save(board);
   }
 }

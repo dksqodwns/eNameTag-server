@@ -14,9 +14,4 @@ export class BoardMetadataDto {
   @IsString()
   @Type(() => String)
   order?: string;
-
-  @IsOptional()
-  @IsString()
-  @Type(() => String)
-  orderBy?: string;
 }
